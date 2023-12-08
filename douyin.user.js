@@ -51,11 +51,13 @@
 
                     // 节点文本
                     var nodeText = middleNode.innerText;
-                    GM_log("节点文本：" + nodeText);
 
                     // 判断是否存在 “广告” 字样
                     if (nodeText.indexOf("广告") !== -1) {
                         GM_log("跳过广告")
+                        // 按下键盘下键
+                        var e = new KeyboardEvent("keydown", { keyCode: 40 });
+                        document.dispatchEvent(e);
                     }
 
                     // 退出循环
@@ -67,18 +69,12 @@
                 result = [];
             }
         }
-
-        // 如果没有找到节点，则抛出异常
-        GM_log("consecutiveCount：" + consecutiveCount);
-        if (consecutiveCount !== 3) {
-            throw new Error("没有找到节点");
-        }
     }
 
     // 设置 MutationObserver 的函数
     function setupMutationObserver(targetNode) {
         // 观察者的选项（要观察哪些突变）
-        var config = { childList: true, subtree: false };
+        var config = { childList: true, subtree: true };
 
         // 创建一个链接到回调函数的观察者实例
         var observer = new MutationObserver(handleMutation);
