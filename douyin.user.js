@@ -50,9 +50,13 @@
             previousObservers.forEach(observer => {
                 observer.disconnect();
             });
-
+            
+            index_num = 0;
             feedItems.forEach(node => {
-                setupMutationObserver(node);
+                if (index_num !== 1) {
+                    setupMutationObserver(node);
+                }
+                index_num++;
             });
 
             const feedItem = feedItems[1];
@@ -76,7 +80,7 @@
     // 设置 MutationObserver 的函数
     function setupMutationObserver(targetNode) {
         // 观察者的选项（要观察哪些突变）
-        var config = { childList: true, subtree: true };
+        var config = { childList: true, subtree: false };
 
         // 创建一个链接到回调函数的观察者实例
         var observer = new MutationObserver(handleMutation);
@@ -90,17 +94,10 @@
 
     // 观察到突变时要调用的函数
     function handleMutation(mutationsList) {
-        for (var mutation of mutationsList) {
-            // 处理变化
-            if (mutation.type === 'childList') {
-                sleep(1000);
-                GM_log("触发检查");
-                var result = findConsecutiveFeedItems();
-                if (result.length === 3) {
-                    checkAndClick(result);
-                }
-            }
-        }
+        GM_log("观察到突变: ", mutationsList.length);
+        GM_log("触发检查");
+        var result = findConsecutiveFeedItems();
+        checkAndClick(result);
     }
 
     // 异步循环执行函数
