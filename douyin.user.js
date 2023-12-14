@@ -82,7 +82,7 @@
     // 设置 MutationObserver 的函数
     function setupMutationObserver(targetNode) {
         // 观察者的选项（要观察哪些突变）
-        var config = { childList: true, characterData: true };
+        var config = { subtree: true, childList: true };
 
         // 创建一个链接到回调函数的观察者实例
         var observer = new MutationObserver(handleMutation);
@@ -96,10 +96,10 @@
 
     // 观察到突变时要调用的函数
     async function handleMutation(mutationsList) {
-        GM_log("观察到突变: " + mutationsList.length);
-        GM_log("触发检查");
-        var result = await findConsecutiveFeedItems();
-        await checkAndClick(result);
+        if (mutationsList.length < 3 && mutationsList > 0) {
+            var result = await findConsecutiveFeedItems();
+            await checkAndClick(result);
+        }
     }
 
     // 异步循环执行函数
