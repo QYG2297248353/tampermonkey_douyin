@@ -93,7 +93,11 @@
         for (var mutation of mutationsList) {
             // 处理变化
             if (mutation.type === 'childList') {
-                findConsecutiveFeedItems();
+                GM_log("触发检查");
+                var result = findConsecutiveFeedItems();
+                if (result.length === 3) {
+                    checkAndClick(result);
+                }
             }
         }
     }
@@ -105,14 +109,15 @@
                 var result = await findConsecutiveFeedItems();
                 if (result.length === 3) {
                     await checkAndClick(result);
-                    await delay(2000);
+                    await delay(3000);
+                    break
                 } else {
-                    GM_log("查找节点失败，正在重试");
-                    await delay(2000);
+                    // GM_log("查找节点失败，正在重试");
+                    await delay(3000);
                 }
             } catch (error) {
-                GM_log("查找节点失败，正在重试");
-                await delay(2000);
+                GM_log("异常信息", error);
+                await delay(3000);
             }
         }
     }
