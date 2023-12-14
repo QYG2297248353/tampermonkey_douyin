@@ -61,13 +61,13 @@
 
             if (nodeText.indexOf("广告") !== -1) {
                 GM_log("跳过广告")
-                var e = new KeyboardEvent("keydown", { keyCode: 40 });
-                document.dispatchEvent(e);
+                var event = new KeyboardEvent("keydown", { keyCode: 40 });
+                document.dispatchEvent(event);
             }
             if (nodeText.indexOf("直播中") !== -1) {
                 GM_log("跳过直播")
-                var e = new KeyboardEvent("keydown", { keyCode: 40 });
-                document.dispatchEvent(e);
+                var event = new KeyboardEvent("keydown", { keyCode: 40 });
+                document.dispatchEvent(event);
             }
         }
     }
@@ -93,6 +93,7 @@
         for (var mutation of mutationsList) {
             // 处理变化
             if (mutation.type === 'childList') {
+                sleep(1000);
                 GM_log("触发检查");
                 var result = findConsecutiveFeedItems();
                 if (result.length === 3) {
