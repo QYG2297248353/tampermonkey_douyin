@@ -95,11 +95,11 @@
     }
 
     // 观察到突变时要调用的函数
-    function handleMutation(mutationsList) {
+    async function handleMutation(mutationsList) {
         GM_log("观察到突变: " + mutationsList.length);
         GM_log("触发检查");
-        var result = findConsecutiveFeedItems();
-        checkAndClick(result);
+        var result = await findConsecutiveFeedItems();
+        await checkAndClick(result);
     }
 
     // 异步循环执行函数
