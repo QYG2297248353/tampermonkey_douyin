@@ -23,6 +23,10 @@
     async function findConsecutiveFeedItems() {
         const feedItems = document.querySelectorAll('[data-e2e="feed-item"]');
 
+        if (feedItems === 0) {
+            return [];
+        }
+
         let resultElements = [];
         let consecutiveCount = 0;
 
@@ -50,8 +54,8 @@
             previousObservers.forEach(observer => {
                 observer.disconnect();
             });
-            
-            index_num = 0;
+
+            var index_num = 0;
             feedItems.forEach(node => {
                 if (index_num !== 1) {
                     setupMutationObserver(node);
@@ -59,9 +63,7 @@
                 index_num++;
             });
 
-            const feedItem = feedItems[1];
-
-            var nodeText = feedItem.innerText;
+            var nodeText = feedItems[1].innerText;
 
             if (nodeText.indexOf("广告") !== -1) {
                 GM_log("跳过广告")
@@ -80,7 +82,7 @@
     // 设置 MutationObserver 的函数
     function setupMutationObserver(targetNode) {
         // 观察者的选项（要观察哪些突变）
-        var config = { childList: true, subtree: false };
+        var config = { childList: true, characterData: true };
 
         // 创建一个链接到回调函数的观察者实例
         var observer = new MutationObserver(handleMutation);
@@ -94,7 +96,7 @@
 
     // 观察到突变时要调用的函数
     function handleMutation(mutationsList) {
-        GM_log("观察到突变: ", mutationsList.length);
+        GM_log("观察到突变: " + mutationsList.length);
         GM_log("触发检查");
         var result = findConsecutiveFeedItems();
         checkAndClick(result);
@@ -114,7 +116,7 @@
                     await delay(3000);
                 }
             } catch (error) {
-                GM_log("异常信息", error);
+                GM_log("异常信息" + error);
                 await delay(3000);
             }
         }
