@@ -110,9 +110,9 @@
                 if (result.length === 3) {
                     await checkAndClick(result);
                     await delay(3000);
+                    GM_log("观察者模式")
                     break
                 } else {
-                    // GM_log("查找节点失败，正在重试");
                     await delay(3000);
                 }
             } catch (error) {
@@ -124,6 +124,9 @@
 
     // 异步循环执行函数
     asyncLoop();
+
+    // 每60秒重新执行一次
+    setInterval(asyncLoop, 60000);
 
     GM_log("抖音插件已启动");
 })();
